@@ -1,0 +1,427 @@
+openapi: 3.0.0
+info:
+  title: ITVX Integration APIs
+  description: |2-
+    <p>
+    ITVX uses a workflow where the SCTE trigger parameters from the Amagi CLOUDPORT playlist is used by ITVX in a DAI (Dynamic Ad Insertion) system. Though CLOUDPORT supports playlist API, the SCTE parameters are not available as part of the standard API interface. As per the Automation (Blip) workflow, the SCTE triggers are auto-added during playlist publish, and the same is not updated in the database. The complete playlist is cached in S3/CDN and is served through another API. This API is used for the Playout server to receive playlists from Automation. So in order to provide API to ITVX, there is an API translation layer required.
+    </p>
+  version: '1.0'
+paths:
+  /partners/{partner_id}/integrations:
+    get:
+      tags:
+      - Integrations
+      summary: Get list of integrations for ITVX.
+      parameters:
+        - name: partner_id
+          in: path
+          required: true
+          description: Partner Id
+          schema:
+            type: number
+            default: 0
+
+      responses:
+        '200':
+          description: List of integrations with details
+          content:
+            "*/*":
+              schema:
+                type: object
+                properties:
+                  integrations:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        integration_id:
+                          type: number
+                          description: Internal ID of the integration
+                        integration_name:
+                          type: string
+                          description: Integration name
+                        integration_description:
+                          type: string
+                          description: A brief description of integration
+                      required:
+                      - integration_id
+                      - integration_name
+                required:
+                - integrations
+      description: ''
+      
+  /partners/{partner_id}/integrations/{intergration_id}/playlist:
+    get:
+      tags:
+        - Playlist
+      summary: Get playlists to be played between certain dates.
+      parameters:
+        - name: partner_id
+          in: path
+          required: true
+          description: Partner Id
+          schema:
+            type: number
+            default: 0
+        - name: intergration_id
+          in: path
+          required: true
+          description: Integration Id
+          schema:
+            type: number
+            default: 0
+        - name: feed_id
+          in: query
+          description: Internal feed ID
+          schema:
+            type: number
+            default: 0
+        - name: feed_code
+          in: query
+          description: Feed code
+          schema:
+            type: string
+            default: ''
+        - name: account_id
+          in: query
+          description: Account ID
+          schema:
+            type: string
+            default: ''
+        - name: token
+          in: query
+          description: Valid user token for authentication
+          schema:
+            type: string
+            default: ''
+        - name: start_date
+          in: query
+          description: Playlists starting date
+          schema:
+            type: string
+            default: '2021-01-01'
+        - name: end_date
+          in: query
+          description: Playlists end date
+          schema:
+            type: string
+            default: '2021-01-07'
+      responses:
+        '200':
+          description: List of playlists for the selected date range
+          content:
+            '*/*':
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/playlist'
+      description: |
+
+        <h3 id="label-Summary">Summary<span><a href="#label-Summary">&para;</a> <a href="#top">&uarr;</a></span></h3>
+
+        <pre>This API is used to fill the calender seen in playlist page.
+        With this API we can,
+          1. Get all the playlists within a set of dates.
+          2. Get all the playlist for a particular date.
+          3. Get the playlist of particular state.
+          4. Get all the latest playlist for a set of date.</pre>
+
+  /partners/{partner_id}/integrations/{intergration_id}/playlist/{id}:
+    get:
+      tags:
+        - Playlist
+      operationId: get_v1_api_playlist_id
+      summary: Get details about a playlist.
+      parameters:
+        - name: partner_id
+          in: path
+          required: true
+          description: Partner Id
+          schema:
+            type: number
+            default: 0
+        - name: intergration_id
+          in: path
+          required: true
+          description: Integration Id
+          schema:
+            type: number
+            default: 0
+        - name: id
+          in: path
+          required: true
+          description: Id of the playlist to get
+          schema:
+            type: string
+            default: 1
+        - name: feed_id
+          in: query
+          description: Internal feed ID
+          schema:
+            type: number
+            default: 0
+        - name: feed_code
+          in: query
+          description: Feed code
+          schema:
+            type: string
+            default: ''
+        - name: account_id
+          in: query
+          description: Account ID
+          schema:
+            type: string
+            default: ''
+        - name: token
+          in: query
+          description: Valid user token for authentication
+          schema:
+            type: string
+            default: ''
+        - name: date
+          in: query
+          description: Date of the playlist to fetch
+          schema:
+            type: string
+            default: ''
+        - name: offset
+          in: query
+          description: 'Start offset of items to be retrived (Default: 0)'
+          schema:
+            type: number
+            default: 0
+        - name: limit
+          in: query
+          description: 'Limit of items to be retrived (Default: -1)'
+          schema:
+            type: number
+            default: -1
+        - name: start_time
+          in: query
+          description: Start time of the playlist
+          schema:
+            type: string
+            default: '00:00:00:000'
+        - name: end_time
+          in: query
+          description: End time of the playlist
+          schema:
+            type: string
+            default: '00:00:00:000'
+        - name: region_name
+          in: query
+          description: Name of the region to which the playlist belongs
+          schema:
+            type: string
+            default: ''
+      responses:
+        '200':
+          description: Playlist details
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/playlist_details'
+      description: |
+
+        <h3 id="label-Summary">Summary<span><a href="#label-Summary">&para;</a> <a href="#top">&uarr;</a></span></h3>
+
+        <pre>This API is used to show detailed playlist
+        With this API, we can,
+          1. Get a playlist with ID
+          2. Get a playlist for a date.
+          3. Filter the items in the playlist based on,
+             3.1 Offset and Limit
+             3.2 Start time and End time</pre>
+components:
+  schemas:
+    playlist:
+      type: object
+      properties:
+        id:
+          type: number
+          description: Playlist internal ID
+        play_on:
+          type: string
+          description: Day on which the playlist will start playing
+        uploaded_by:
+          type: string
+          description: User who created the playlist
+        created_at:
+          type: string
+          description: Time at which the playlist was created in BLIP
+        status:
+          type: string
+          enum:
+            - initial
+            - uploading
+            - new
+            - publishing
+            - published
+            - processing
+            - failed
+            - processed
+            - invalid
+            - modified
+            - deleted
+          description: Current state of the playlist in BLIP
+        ptype:
+          type: string
+          enum:
+            - normal
+            - default
+            - partial
+            - break
+          description: Type of playlist in BLIP
+        version:
+          type: string
+          description: Version of playlist due to modifications
+        show_ids:
+          type: array
+          items:
+            type: string
+          description: Array of integers containing the shows in the playlist
+        start_time:
+          type: string
+          description: Time at which the playlist will start playing
+        end_time:
+          type: string
+          description: Time at which the playlist will stop playing
+        is_playing:
+          type: boolean
+          description: Whether this playlist is playing currently
+      additionalProperties: false
+      required:
+        - id
+        - play_on
+        - uploaded_by
+        - created_at
+        - status
+        - ptype
+        - version
+        - show_ids
+        - start_time
+        - end_time
+        - is_playing
+    playlist_details:
+      type: object
+      properties:
+        id:
+          type: number
+          description: Playlist Id
+        action:
+          type: string
+          description: Playlist action
+        start_time:
+          type: string
+          description: Start time for the playlist
+        end_time:
+          type: string
+          description: End time for the playlist
+        items:
+          type: array
+          items:
+            type: object
+            properties:
+              id:
+                type: number
+                description: Item Id
+              title:
+                type: string
+                description: Title of content
+              trigger-type:
+                type: string
+                description: Trigger type
+              asset-id:
+                type: string
+                description: Asset Id
+              primary-item-id:
+                type: number
+                description: Asset Id of primary item. Applicable for dependant secondary item (graphics, SCTE trigger etc.).
+              mini_playlist:
+                type: string
+                description: Miniplaylist Id, if this
+              reconcile_id:
+                type: string
+                description: Reconcole Id used for asrun consolidation
+              type:
+                type: string
+                enum:
+                - primary
+                - secondary
+                - trigger
+                - marker
+                - signature
+                description: Item type
+              sub-type:
+                type: string
+                description: Subtype
+              comments:
+                type: string
+                description: Comments
+              subtitle_offset:
+                type: number
+                description: Subtitle Offset
+              subtitle_id:
+                type: string
+                description: Subtitle Asset Id
+              duration: 
+                type: string
+                description: Duration in SMPTE timecode ('00:00:30.080')
+              start-time: 
+                type: string
+                description: Start time in YYYY-MM-DD HH:MM:SS.SSS +DDDD(e.g. '2022-07-26 23:18:40.560 +0000')
+              offset_ms:
+                type: number
+                description: Offset in milliseconds
+              offset:
+                type: string
+                description: Offset in SMPTE timecode ('00:00:30.080')
+              start-timecode:
+                type: number
+                description: Start timecode
+              som:
+                type: number
+                description: SOM (Start Of Message)
+              segment-id:
+                type: string
+                description: Segment Id
+              trigger_params:
+                type: object
+                description: Trigger (SCTE) parameters
+                properties:
+                  break_duration:
+                    type: number
+                    description: Duration in milliseconds
+                  command_type:
+                    type: string
+                    description: SCTE Command - e.g. splice_request
+                  dpi_pid_index:
+                    type: number
+                    description: DPI Index
+                  pre_roll_time:
+                    type: number
+                    description: SCTE Pre-roll in milliseconds
+                  splice_event_id:
+                    type: number
+                    description: Spice event Id
+                  unique_program_id:
+                    type: number
+                    description: Unique program Id
+                  splice_insert_type:
+                    type: number
+                    description: Splice Insert Type
+              cookie:
+                type: string
+                description: Cookie
+              show_id:
+                type: string
+                description: Show Id
+              meta:
+                type: string
+                description: Metadata
+      required:
+      - id
+      - start_time
+      - end_time
+      - items
+  

@@ -1,0 +1,8 @@
+site_name: Partner Integrations
+nav:
+  - Introduction: index.md
+
+theme: material
+plugins:
+  - render_swagger
+  - mermaid2
