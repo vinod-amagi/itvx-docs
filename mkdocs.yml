@@ -1,6 +1,7 @@
 site_name: Partner Integrations
 nav:
   - Introduction: index.md
+  - ITVX: itvx.md
 
 theme: material
 plugins:

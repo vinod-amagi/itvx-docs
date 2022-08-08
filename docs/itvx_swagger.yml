@@ -16,6 +16,7 @@ paths:
         This function authenticates the user and returns access token
         :param conn: dependency injection to share database connection
         :param form_data: OAuth2 compatible token login, get an access token for future requests
+      operationId: login_for_access_token_token_post
       requestBody:
         content:
           application/x-www-form-urlencoded:
@@ -37,7 +38,7 @@ paths:
               schema:
                 "$ref": "#/components/schemas/HTTPValidationError"
 
-  /partners/{partner_id}/integrations:
+  /partners/itvx/integrations:
     get:
       tags:
       - Integrations
@@ -80,11 +81,11 @@ paths:
                 - integrations
       description: ''
       
-  /partners/{partner_id}/integrations/{integration_id}:
+  /partners/itvx/integrations/playlist:
     get:
       tags:
         - Playlist
-      summary: Get playlists of a channel (feed) to be played between two dates.
+      summary: Get playlists to be played between certain dates.
       parameters:
         - name: partner_id
           in: path
@@ -156,11 +157,12 @@ paths:
           3. Get the playlist of particular state.
           4. Get all the latest playlist for a set of date.</pre>
 
-  /partners/{partner_id}/integrations/{integration_id}/{id}:
+  /partners/itvx/integrations/playlist/{id}:
     get:
       tags:
         - Playlist
-      summary: Get details about the specified playlist
+      operationId: get_v1_api_playlist_id
+      summary: Get details about a playlist.
       parameters:
         - name: partner_id
           in: path
