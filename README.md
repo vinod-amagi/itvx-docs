@@ -16,8 +16,10 @@ The repository briefly describes the integration planned for ITVX with Amagi CLO
     
     * Go to root folder
     
-    * Run
+    * Run the following command
     
 ````bash
 mkdocs serve
 ````
+
+Mkdocs documentation can be viewed at http://127.0.0.1:8000/ from a web browser.
