@@ -1,6 +1,6 @@
 openapi: 3.0.0
 info:
-  title: ITVX Integration APIs
+  title: Integration APIs
   description: |2-
     <p>
     ITVX uses a workflow where the SCTE trigger parameters from the Amagi CLOUDPORT playlist is used by ITVX in a DAI (Dynamic Ad Insertion) system. Though CLOUDPORT supports playlist API, the SCTE parameters are not available as part of the standard API interface. As per the Automation (Blip) workflow, the SCTE triggers are auto-added during playlist publish, and the same is not updated in the database. The complete playlist is cached in S3/CDN and is served through another API. This API is used for the Playout server to receive playlists from Automation. So in order to provide API to ITVX, there is an API translation layer required.
