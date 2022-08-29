@@ -8380,34 +8380,23 @@ tags:
 - name: accounts
   description: |2
 
-    <h2 id="label-Long+description">Long description<span><a href="#label-Long+description">&para;</a> <a href="#top">&uarr;</a></span></h2>
-
+    <h2 id="label-Long+description">Accounts<span><a href="#label-Long+description">&para;</a> <a href="#top">&uarr;</a></span></h2>
+    An account represents a tenant in Amagi CLOUDPORT, where all media contents, channels, schedules, playout and live are grouped.
     <pre>Account related apis.
     Admin role is required for these endpoints - create, update, delete, index, feeds.</pre>
-- name: configs
-  description: |2
-
-    <h2 id="label-Long+description">Long description<span><a href="#label-Long+description">&para;</a> <a href="#top">&uarr;</a></span></h2>
-
-    <p>Config APIs used for CRUD of configs.</p>
-- name: event_trigger
-  description: |2
-
-    <h2 id="label-Long+description">Long description<span><a href="#label-Long+description">&para;</a> <a href="#top">&uarr;</a></span></h2>
-
-    <pre>Event Trigger related apis.</pre>
+    
 - name: feeds
   description: |2
 
-    <h2 id="label-Long+description">Long description<span><a href="#label-Long+description">&para;</a> <a href="#top">&uarr;</a></span></h2>
-
-    <pre>Represents a Feed in Blip.
+    <h2 id="label-Long+description">Feeds (Channels)<span><a href="#label-Long+description">&para;</a> <a href="#top">&uarr;</a></span></h2>
+    Represents a Feed or channel in Amagi CLOUDPORT.
+    
     Following attributes are similar to a TV channel -
       1. Video related - frames per second (FPS), resolution,
       2. Audio related - primary language, sampling rate, output channels
       3. Subtitle related - primary language, file format
       4. Live broadcast - enable
-    Performs the following operations (similar to a TV channel) -
+          <br/>Performs the following operations (similar to a TV channel) -
       1. Can play a video.
       2. Video can have audio in one or more languages -
          2.1. For every language, the audio file can be in - (a) multiple codecs, (b) multiple output channels.
@@ -8422,7 +8411,7 @@ tags:
 - name: media
   description: |2
 
-    <h2 id="label-Long+description">Long description<span><a href="#label-Long+description">&para;</a> <a href="#top">&uarr;</a></span></h2>
+    <h2 id="label-Long+description">Media<span><a href="#label-Long+description">&para;</a> <a href="#top">&uarr;</a></span></h2>
 
     <pre>You can fetch verious assets using these APIs.
     Access token and is required for authentication
@@ -8431,23 +8420,18 @@ tags:
 - name: playlist
   description: |2
 
-    <h2 id="label-Long+Description">Long Description<span><a href="#label-Long+Description">&para;</a> <a href="#top">&uarr;</a></span></h2>
+    <h2 id="label-Long+Description">Playlist<span><a href="#label-Long+Description">&para;</a> <a href="#top">&uarr;</a></span></h2>
 
     <pre>New Playlist Controller for CloudPort
     Following Changes are made in this controller:
       1. Create Playlist creates items along with default logo and other auto added items.
       2. Publish Playlist websocket triggering is done from controllers.
       3. Status of the item is stored in DB.</pre>
-- name: region
-  description: |2
 
-    <h2 id="label-Long+description">Long description<span><a href="#label-Long+description">&para;</a> <a href="#top">&uarr;</a></span></h2>
-
-    <pre>Headend Region apis , to associate headends to regions.</pre>
 - name: users
   description: |2
 
-    <h2 id="label-Long+description">Long description<span><a href="#label-Long+description">&para;</a> <a href="#top">&uarr;</a></span></h2>
+    <h2 id="label-Long+description">Users<span><a href="#label-Long+description">&para;</a> <a href="#top">&uarr;</a></span></h2>
 
     <pre>Represents an User in Blip.</pre>
 security:
