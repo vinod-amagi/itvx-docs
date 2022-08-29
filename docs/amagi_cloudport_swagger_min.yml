@@ -6,74 +6,10 @@ info:
 
     <p>Version: Amagi CLOUDPORT v3.0</p>
 
-    These APIs are a subset of CLOUDPORT APIs and these are API meant to be used after consultation with CLOUDPORT Product Team. Amagi CLOUDPORT does not guarantee Transaction per Second (TPS) and will not be covered under standard product SLAs. These are APIs are provided to selected partners to integrated with the product, after review and trials in a production environment.
+    These APIs are a subset of CLOUDPORT APIs and these are API meant to be used after consultation with CLOUDPORT Product Team. Amagi CLOUDPORT does not guarantee Transaction per Second (TPS) and will not be covered under standard product SLAs. These are APIs are provided to selected partners to integrate with the product, after review and trials in a staging or pre-production environment.
 
   version: '1.0'
 paths:
-  "/v1/api/accounts":
-    get:
-      tags:
-      - accounts
-      operationId: get_v1_api_accounts
-      summary: Get details for all accounts.
-      responses:
-        '200':
-          description: List of accounts with details
-          content:
-            "*/*":
-              schema:
-                type: object
-                properties:
-                  accounts:
-                    type: array
-                    items:
-                      type: object
-                      properties:
-                        account_id:
-                          type: number
-                          description: Internal ID of the account
-                        account_name:
-                          type: string
-                          description: Account name
-                        account_domain:
-                          type: string
-                          description: A URL safe identifier for an account.
-                        storage:
-                          type: string
-                          enum:
-                          - S3
-                          - GCS
-                          description: Storage service type
-                      additionalProperties: false
-                      required:
-                      - account_id
-                      - account_name
-                      - account_domain
-                      - storage
-                additionalProperties: false
-                required:
-                - accounts
-      description: ''
-    post:
-      tags:
-      - accounts
-      operationId: post_v1_api_accounts
-      summary: Create new account
-      requestBody:
-        "$ref": "#/components/requestBodies/post_v1_api_accounts"
-      responses:
-        '200':
-          description: Newly created account details
-          content:
-            "*/*":
-              schema:
-                "$ref": "#/components/schemas/account"
-      description: |2
-
-        <h3 id="label-Summary">Summary<span><a href="#label-Summary">&para;</a> <a href="#top">&uarr;</a></span></h3>
-
-        <pre>This API is called when - TODO
-        Creates a new account with the given configs. Creates an s3 bucket.</pre>
   "/v1/api":
     post:
       tags:
@@ -1791,7 +1727,7 @@ paths:
 
         <h3 id="label-Summary">Summary<span><a href="#label-Summary">&para;</a> <a href="#top">&uarr;</a></span></h3>
 
-        <pre>This API is called when - TODO
+        <pre>
         Returns all the feeds associated with this user based on params.
         Check response description for details.</pre>
   "/v1/api/feeds/{id}":
@@ -7091,7 +7027,7 @@ paths:
 
         <h3 id="label-Summary">Summary<span><a href="#label-Summary">&para;</a> <a href="#top">&uarr;</a></span></h3>
 
-        <pre>This API is called when - TODO
+        <pre>
         Get list of missing items on cloud.
         This API is different from the /missing API in terms of showing the duplicate items too, ie, if an item is scheduled more
           than once in a playlist, then all the instances at which it&#39;s scheduled will show up rather than just one instance along with count</pre>
@@ -7282,7 +7218,7 @@ paths:
 
         <h3 id="label-Summary">Summary<span><a href="#label-Summary">&para;</a> <a href="#top">&uarr;</a></span></h3>
 
-        <pre>This API is called when - TODO
+        <pre>
         Get list of missing items on cloud and (optionally) headends.</pre>
   "/v1/api/playlist/{id}/report_missing_list":
     post:
@@ -7941,7 +7877,7 @@ paths:
 
         <h3 id="label-Summary">Summary<span><a href="#label-Summary">&para;</a> <a href="#top">&uarr;</a></span></h3>
 
-        <pre>This API is called when - TODO
+        <pre>
           1. If live slate is enabled (in feed&#39;s meta) for the feed, then a break playlist is created along with live slates.
           2. If only live broadcasting is enabled, then a break playlist is created.
           3. 403 is returned if playlist creation/save fails or live broadcasting is not enabled for the feed.</pre>
@@ -8083,7 +8019,7 @@ paths:
 
         <h3 id="label-Summary">Summary<span><a href="#label-Summary">&para;</a> <a href="#top">&uarr;</a></span></h3>
 
-        <pre>This API is called when - TODO
+        <pre>
         Redirects to URL can be used to download the original playlist file. This URL is also returned as a response key in other API calls.</pre>
   "/v1/api/users":
     get:
@@ -8382,8 +8318,7 @@ tags:
 
     <h2 id="label-Long+description">Accounts<span><a href="#label-Long+description">&para;</a> <a href="#top">&uarr;</a></span></h2>
     An account represents a tenant in Amagi CLOUDPORT, where all media contents, channels, schedules, playout and live are grouped.
-    <pre>Account related apis.
-    Admin role is required for these endpoints - create, update, delete, index, feeds.</pre>
+    <pre>Account related apis are accessible through a user account with admin role. These are used for provisioning the account and channels.</pre>
     
 - name: feeds
   description: |2
@@ -8512,30 +8447,6 @@ components:
       in: query
       description: Populate this token for authentication
   schemas:
-    account:
-      type: object
-      properties:
-        account_id:
-          type: number
-          description: Internal ID of the account
-        account_name:
-          type: string
-          description: Account name
-        account_domain:
-          type: string
-          description: A URL safe identifier for an account.
-        storage:
-          type: string
-          enum:
-          - S3
-          - GCS
-          description: Storage service type
-      additionalProperties: false
-      required:
-      - account_id
-      - account_name
-      - account_domain
-      - storage
     feed_details:
       type: object
       properties:
